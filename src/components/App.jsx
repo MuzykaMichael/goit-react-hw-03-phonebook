@@ -6,7 +6,8 @@ import {Container,
   FirstTitle,
   SecondTitle,
   Breaker,
-  Message,} from './App.styled'
+  Message,} from './App.styled';
+// import { nanoid } from "nanoid";
 
 export class App extends Component {
   state = {
@@ -43,14 +44,34 @@ export class App extends Component {
 
   componentDidMount = () =>{
     const contact = JSON.parse(localStorage.getItem('contacts'));
-    console.log(contact)
-    if (this.state.contacts === []) {
+    if (contact) {
       this.setState({contacts:[...contact]})
     }
   }
 
-  componentDidUpdate = (prevProps,prevState) =>{
-    localStorage.setItem('contacts',JSON.stringify([...prevState.contacts]))
+  // addContact = (text) =>{
+  //   const contact ={
+  //     id: nanoid(),
+  //     text,
+  //   };
+
+  //   this.setState((prevState)=>({
+  //     contacts: [...prevState.contacts,contact]
+  //   }))
+
+  // }
+
+  // deleteContact = (id) =>{
+  //   this.setState((prevState)=>({
+  //     contacts: prevState.contacts.filter((contact)=> contact.id !== id)
+  //   }))
+  // }
+
+  componentDidUpdate = (_,prevState) =>{
+    const {contacts} = this.state;
+    if (prevState.contacts !== contacts) {
+      localStorage.setItem('contacts',JSON.stringify(contacts))
+    }
 
   }
 
