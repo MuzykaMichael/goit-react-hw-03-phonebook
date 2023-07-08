@@ -7,7 +7,6 @@ import {Container,
   SecondTitle,
   Breaker,
   Message,} from './App.styled';
-// import { nanoid } from "nanoid";
 
 export class App extends Component {
   state = {
@@ -15,12 +14,27 @@ export class App extends Component {
     filter: '',
   }
   
+  componentDidMount = () =>{
+    const contact = JSON.parse(localStorage.getItem('contacts'));
+    if (contact) {
+      this.setState({contacts:[...contact]})
+    }
+  }
+
+  componentDidUpdate = (_,prevState) =>{
+    const {contacts} = this.state;
+    if (prevState.contacts !== contacts) {
+      localStorage.setItem('contacts',JSON.stringify(contacts))
+    }
+
+  }
+
   formSubmitHandle = newContact =>{
     const sameContact = this.state.contacts.find(
-      ({name})=>name.toLowerCase()===newContact.name.toLowerCase()
+      ({name,number})=>name.toLowerCase()===newContact.name.toLowerCase() || number===newContact.number
     );
     if (sameContact) {
-      alert(`${newContact.name} is already exists.`)
+      alert(`${newContact.name} or ${newContact.number} is already exists.`)
       return
     }
     this.setState(prevState=>{
@@ -42,38 +56,7 @@ export class App extends Component {
     });
   }
 
-  componentDidMount = () =>{
-    const contact = JSON.parse(localStorage.getItem('contacts'));
-    if (contact) {
-      this.setState({contacts:[...contact]})
-    }
-  }
 
-  // addContact = (text) =>{
-  //   const contact ={
-  //     id: nanoid(),
-  //     text,
-  //   };
-
-  //   this.setState((prevState)=>({
-  //     contacts: [...prevState.contacts,contact]
-  //   }))
-
-  // }
-
-  // deleteContact = (id) =>{
-  //   this.setState((prevState)=>({
-  //     contacts: prevState.contacts.filter((contact)=> contact.id !== id)
-  //   }))
-  // }
-
-  componentDidUpdate = (_,prevState) =>{
-    const {contacts} = this.state;
-    if (prevState.contacts !== contacts) {
-      localStorage.setItem('contacts',JSON.stringify(contacts))
-    }
-
-  }
 
 
 
